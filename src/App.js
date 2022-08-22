@@ -28,6 +28,8 @@ function App() {
       console.log("Wallet exists! We're ready to go!")
     }
 
+    getTotal();
+
     const accounts = await ethereum.request({ method: 'eth_accounts' });
 
     if (accounts.length !== 0) {
@@ -92,6 +94,8 @@ function App() {
 
     } catch (err) {
       console.log(err);
+    } finally {
+      await getTotal();
     }
   }
 
