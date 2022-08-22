@@ -76,7 +76,7 @@ function App() {
         const nftContract = new ethers.Contract(contractAddress, abi, signer);
 
         console.log("Initialize payment");
-        let nftTxn = await nftContract.mintNFTs(1, { value: ethers.utils.parseEther(NFT_PRICE) });
+        let nftTxn = await nftContract.makeNFT({ value: ethers.utils.parseEther(NFT_PRICE) });
 
         console.log("Mining... please wait");
         await nftTxn.wait();
