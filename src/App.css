@@ -1,22 +1,215 @@
-.main-app {
-  text-align: center;
-  margin: 100px;
+/* Some things I have to put here first... */
+:root {
+  --white: #fff;
+  --black: #0f0f0f;
+  --primary: #452CB3;
+  --primaryDark: #382688;
+  --secondary: #FFC700;
+  --secondaryDark: #ddb00f;
 }
 
-.cta-button {
-  padding: 15px;
+@font-face {
+  font-family: "Akira";
+  src: url('assets/fonts/Akira\ Super\ Bold.ttf') format('truetype'),
+       url('assets/fonts/Akira-Super-Bold.woff') format('woff')
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url('assets/fonts/Montserrat-Regular.ttf') format('truetype'),
+       url('assets/fonts/Montserrat-Regular.woff') format('woff');
+}
+
+@font-face {
+  font-family: "Montserrat Bold";
+  src: url('assets/fonts/Montserrat-Bold.ttf') format('truetype'),
+       url('assets/fonts/Montserrat-Bold.woff') format('woff');
+}
+
+/* Global document sizes */
+html {
+  box-sizing: border-box;
+  font-size: 62.5%;
+  width: 100%;
+  height: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+  margin: 0px;
+  padding: 0px;
+}
+
+/* Page styling begins here */
+.noDis {
+  opacity: 0;
+}
+
+.mainApp {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--black);
+  position: relative;
+  overflow: hidden;
+}
+
+.mintApp {
+  opacity: 1;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  background-color: var(--black);
+  background-image: url('assets/images/mintBackground.png');
+  background-size: cover;
+  background-position: top;
+  -webkit-transition: opacity 500ms ease;
+  -ms-transition: opacity 500ms ease;
+  transition: opacity 500ms ease;
+}
+
+.layer {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  background-color: var(--black);
+  opacity: 0.3;
+  -webkit-transition: opacity 500ms ease;
+  -ms-transition: opacity 500ms ease;
+  transition: opacity 500ms ease;
+}
+
+.bgImageContainer {
+  position: fixed;
+  right: -5rem;
+  bottom: -5rem;
+  -webkit-transition: all 500ms ease;
+  -ms-transition: all 500ms ease;
+  transition: all 500ms ease;
+}
+
+.bgImage {
+  margin-top: 10rem;
+  opacity: .3;
+  height: 100vh;
+  z-index: 1;
+}
+
+.bgImageNoOp {
+  opacity: 1;
+  z-index: 0;
+}
+
+.text p{
+  font-family: 'Montserrat';
+  color: var(--white);
+  font-size: 1.4rem;
+  margin: 1rem 0 1rem 0
+}
+
+.text span, footer span{
+  font-family: 'Montserrat Bold';
+  color: var(--white)
+}
+
+.mainSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.logo{
+  width: 30rem;
+}
+
+.button {
+  padding: 1.5rem 3rem;
   border: none;
-  border-radius: 12px;
-  min-width: 250px;
-  color: white;
-  font-size: 18px;
+  border-radius: 1rem;
+  min-width: 15rem;
+  background-color: var(--primary);
+  font-family: 'Akira';
+  font-size: 1.8rem;
   cursor: pointer;
 }
 
-.connect-wallet-button {
-  background: rgb(32, 129, 226);
+.mintButton {
+  background-color: var(--secondaryDark);
+  padding: 1.5rem 14rem;
+  -webkit-transition: all 500ms ease;
+  -ms-transition: all 500ms ease;
+  transition: all 500ms ease;
 }
 
-.mint-nft-button {
-  background: orange;
+.button p {
+  color: var(--white);
+  letter-spacing: 0.1rem;
+  font-size: 2.4rem;
+}
+
+.button span {
+  color: var(--secondary)
+}
+
+.mintButton span {
+  color: var(--primary);
+  -webkit-transition: all 500ms ease;
+  -ms-transition: all 500ms ease;
+  transition: all 500ms ease;
+}
+
+footer {
+  position: fixed;
+  max-width: 20rem;
+  left: 1rem;
+  bottom: 1rem;
+}
+
+.lowLogo {
+  max-width: 6rem;
+}
+
+footer p {
+  font-family: 'Montserrat';
+  color: var(--white);
+  font-size: 0.9rem;
+}
+
+/* Media queries (for responsiveness) */
+@media (max-width: 680px) {
+  .bgImageContainer {
+    left: -50vw;
+  }
+}
+@media (max-width: 480px) {
+  .button {
+    width: 100vw;
+    border-radius: 0;
+  }
+}
+
+/* Animations */
+.button:hover{
+  background-color: var(--primaryDark);
+  -webkit-transition: background-color 50ms linear;
+  -ms-transition: background-color 50ms linear;
+  transition: background-color 50ms linear;
+}
+
+.mintButton:hover{
+  background-color: var(--secondary);
+  -webkit-transition: background-color 50ms linear;
+  -ms-transition: background-color 50ms linear;
+  transition: background-color 50ms linear;
 }
