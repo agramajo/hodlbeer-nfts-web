@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+/* eslint-disable jsx-a11y/alt-text */
+import { useEffect, useState, useRef } from 'react';
 import './App.css';
 import contract from './utils/HodlBeerNFT.json';
 import { ethers } from 'ethers';
@@ -8,15 +9,44 @@ import { ethers } from 'ethers';
  */
 const contractAddress = "0x779d37AcaD165C719583a010E1548d358f23373C";
 const abi = contract.abi;
-
 const TOTAL_MINT_COUNT = 6000;
 const NFT_PRICE = "0.01";
 
 function App() {
+  // Style things
 
+
+  const images = useRef({
+    standard: require('./assets/images/logo.png'),
+    negative: require('./assets/images/negativeLogo.png'),
+    decor: require('./assets/images/bear.png'),
+  }).current
+
+  // Made for testing, uncomment it and change every "currentAccount" for "hardTest" in every react fragment
+  //const [hardTest, setHardTest] = useState(false)
+  //const handleHardTest = () => setHardTest(!hardTest)
+
+  const actionButton = () => {
+    // Change the onClick content to handleHardTest to test styles without connecting the wallet
+    return (
+      <button
+        onClick={
+          currentAccount ? mintNftHandler : connectWalletHandler
+          //handleHardTest
+        } 
+        className={`button ${currentAccount && 'mintButton'}`}
+      >
+        {currentAccount 
+          ? <p>Mint <span>NFT</span></p> 
+          : <p>Connect <span>my Wallet</span></p>
+        }
+      </button>
+    )
+  }
+
+  ///////////////
   const [currentAccount, setCurrentAccount] = useState(null);
   const [nftTotal, setNftTotal] = useState("")
-
 
   const checkWalletIsConnected = async () => {
     const { ethereum } = window;
@@ -99,22 +129,6 @@ function App() {
     }
   }
 
-  const connectWalletButton = () => {
-    return (
-      <button onClick={connectWalletHandler} className='cta-button connect-wallet-button'>
-        Connect Wallet
-      </button>
-    )
-  }
-
-  const mintNftButton = () => {
-    return (
-      <button onClick={mintNftHandler} className='cta-button mint-nft-button'>
-        Mint NFT
-      </button>
-    )
-  }
-
   async function getTotal() {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const nftContract = new ethers.Contract(contractAddress, abi, provider);
@@ -130,15 +144,38 @@ function App() {
   }, [])
 
   return (
-    <div className='main-app'>
-      <h1>Hodl Beer Club</h1>
-      <div>
-        Progress [{nftTotal}/{TOTAL_MINT_COUNT}]
-      </div>
-      <div>
-        {currentAccount ? mintNftButton() : connectWalletButton()}
-      </div>
-    </div>
+    <html>
+      <body className={`mainApp`}>
+        {/* Layer */}
+        <div className={`noDis ${currentAccount && 'mintApp'}`}/>
+          <div className="bgImageContainer">
+            <img src={images.decor} className={`bgImage ${currentAccount && 'bgImageNoOp'}`}/>
+          </div>
+        <div className={`noDis ${currentAccount && 'layer'}`}/>
+
+        {/* Center body */}
+        <section className="mainSection">
+          {/* Logo */}
+          <div className="logo">
+            <img src={images.standard} alt="Hodl Beer" className="logo"/>
+          </div>
+          {/* Minting progress */}
+          <div className="text">
+            <p className="progress">Progress <span>[{nftTotal}/{TOTAL_MINT_COUNT}]</span></p>
+          </div>
+          {/* Mint Button */}
+          <div>
+            {actionButton()}
+          </div>
+        </section>
+
+        {/* Footer */}  
+        <footer>
+          <img src={images.negative} className="lowLogo"/>
+          <p>Here you can put <span>any type of legal disclaimer</span>, take this as a lorem ipsum</p>
+        </footer>
+      </body>
+    </html>
   )
 }
 
