@@ -3,6 +3,8 @@ import { useEffect, useState, useRef } from 'react';
 import './App.css';
 import contract from './utils/HodlBeerNFT.json';
 import { ethers } from 'ethers';
+import toast, { Toaster } from 'react-hot-toast';
+
 
 /*
  * TODO change
@@ -82,8 +84,10 @@ function App() {
       const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
       console.log("Found an account! Address: ", accounts[0]);
       setCurrentAccount(accounts[0]);
+      toast.success("Wallet connected!");
     } catch (err) {
       console.log(err)
+      toast.error("Connect wallet error!");
     }
   }
 
@@ -111,12 +115,16 @@ function App() {
         let nftTxn = await nftContract.makeNFT({ value: ethers.utils.parseEther(NFT_PRICE) });
 
         console.log("Mining... please wait");
-        await nftTxn.wait();
-
-        /*
-         * TODO change
-         */
-        console.log(`Mined, see transaction: https://goerli.etherscan.io/tx/${nftTxn.hash}`);
+        const receipt = await nftTxn.wait();
+        if (receipt.status === 1) {
+            /*
+             * TODO change
+             */
+            console.log(`Mined, see transaction: https://goerli.etherscan.io/tx/${nftTxn.hash}`);
+            toast.success("Transaction OK! Enjoy your NFT.");
+        } else {
+            toast.error("Transaction failed! Please try again.");
+        }
 
       } else {
         console.log("Ethereum object does not exist");
@@ -146,6 +154,7 @@ function App() {
   return (
     <html>
       <body className={`mainApp`}>
+        <Toaster />
         {/* Layer */}
         <div className={`noDis ${currentAccount && 'mintApp'}`}/>
           <div className="bgImageContainer">
