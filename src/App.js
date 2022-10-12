@@ -49,6 +49,7 @@ function App() {
   ///////////////
   const [currentAccount, setCurrentAccount] = useState(null);
   const [nftTotal, setNftTotal] = useState("")
+  const [ref, setRef] = useState("")
 
   const checkWalletIsConnected = async () => {
     const { ethereum } = window;
@@ -112,7 +113,14 @@ function App() {
         const nftContract = new ethers.Contract(contractAddress, abi, signer);
 
         console.log("Initialize payment");
-        let nftTxn = await nftContract.makeNFT({ value: ethers.utils.parseEther(NFT_PRICE) });
+        try {
+            let nftTxn = await nftContract.makeNFT({ value: ethers.utils.parseEther(NFT_PRICE) });
+        } catch (error) {
+            if (error.code === -32000) {
+                toast.error("You don't have enough ETH!");
+                return
+            }
+        }
 
         console.log("Mining... please wait");
         const receipt = await nftTxn.wait();
@@ -151,6 +159,14 @@ function App() {
     checkWalletIsConnected();
   }, [])
 
+  // set ref
+  useEffect(() => {
+    const queryString = window.location.search;
+    const params = new URLSearchParams(queryString);
+    const ref = params.get('ref');
+    if(ref) setRef(ref.toLowerCase());
+  }, []);
+
   return (
     <html>
       <body className={`mainApp`}>
@@ -171,6 +187,8 @@ function App() {
           {/* Minting progress */}
           <div className="text">
             <p className="progress">Progress <span>[{nftTotal}/{TOTAL_MINT_COUNT}]</span></p>
+           { ref && <p className="progress">Referral <span>{ref}</span></p> }
+           <p className="progress">Price <span><s>0.03</s> 0.027</span></p>
           </div>
           {/* Mint Button */}
           <div>
