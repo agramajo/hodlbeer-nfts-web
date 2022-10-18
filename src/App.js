@@ -113,8 +113,9 @@ function App() {
         const nftContract = new ethers.Contract(contractAddress, abi, signer);
 
         console.log("Initialize payment");
+        let nftTxn;
         try {
-            let nftTxn = await nftContract.makeNFT({ value: ethers.utils.parseEther(NFT_PRICE) });
+            nftTxn = await nftContract.makeNFT({ value: ethers.utils.parseEther(NFT_PRICE) });
         } catch (error) {
             if (error.code === -32000) {
                 toast.error("You don't have enough ETH!");
